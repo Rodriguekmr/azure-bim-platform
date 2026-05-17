@@ -1,2 +1,37 @@
-# azure-bim-platform
-Cloud-based BIM file tracking and workflow automation platform built with Azure, Python, Terraform and Streamlit.
+# Azure BIM Workflow Automation Platform
+
+## Project Objective
+
+This project demonstrates how Azure cloud services can support BIM workflow automation and project visibility.
+
+## Technologies
+
+- Microsoft Azure
+- Azure Blob Storage
+- Azure Functions
+- Python
+- Terraform
+- Docker
+- Streamlit
+
+## Planned Features
+
+- BIM file upload tracking
+- Metadata extraction
+- Dashboard visualization
+- Workflow notifications
+- CI/CD deployment
+
+## Roadmap
+
+### Phase 1
+Setup Azure environment and storage.
+
+### Phase 2
+Implement Azure Functions and automation.
+
+### Phase 3
+Build dashboard and analytics.
+
+### Phase 4
+Deploy application and finalize documentation.
