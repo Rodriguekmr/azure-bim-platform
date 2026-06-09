@@ -2,13 +2,13 @@
 
 ## Project Objective
 
-This project demonstrates how Azure cloud services can support BIM workflow automation and project visibility.
+This project demonstrates how Azure cloud services can support BIM workflow automation, metadata processing, and project visibility.
 
 ## Technologies
 
 - Microsoft Azure
 - Azure Blob Storage
-- Azure Functions
+- Azure Functions (Node.js)
 - Python
 - Terraform
 - Docker
