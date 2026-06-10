@@ -21,6 +21,7 @@ This project demonstrates how Azure cloud services can support BIM workflow auto
 - Dashboard visualization
 - Workflow notifications
 - CI/CD deployment
+- CI/CD test
 
 ## Roadmap
 
