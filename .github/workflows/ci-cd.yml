@@ -1,0 +1,40 @@
+name: BIM Platform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Validate Streamlit app
+        run: |
+          python -m py_compile app.py
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
+        working-directory: terraform
+
+      - name: Terraform Validate
+        run: |
+          terraform init -backend=false
+          terraform validate
+        working-directory: terraform
