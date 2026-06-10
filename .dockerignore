@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+
+# Terraform (IMPORTANT)
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Node (Azure Functions)
+node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files (VERY IMPORTANT)
+.env
+local.settings.json
+
+# IDE
+.vscode/
+
+# Docker
+Dockerfile
+.dockerignore
