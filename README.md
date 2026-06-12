@@ -1,5 +1,11 @@
 # Azure BIM Workflow Automation Platform
+![Architecture](docs/Azure-Architecture.png)
 
+## Dashboard
+
+![Dashboard](docs/Azure-dashboard.png)
+![Dashboard](docs/Azure-dashboard1.png)
+![Dashboard](docs/Azure-dashboard2.png)
 ## Overview
 
 The Azure BIM Workflow Automation Platform is a cloud-based solution designed to improve the management, tracking, and visibility of Building Information Modelling (BIM) files throughout a construction project lifecycle.
