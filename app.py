@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from azure.data.tables import TableServiceClient
 
+from azure.storage.blob import BlobServiceClient
 # ----------------------------
 # CONFIG
 # ----------------------------
@@ -50,7 +51,63 @@ df["upload_date"] = pd.to_datetime(df["upload_date"], errors="coerce")
 # ----------------------------
 # UI
 # ----------------------------
+page = st.sidebar.selectbox(
+    "Navigation",
+    [
+        "Upload BIM Files",
+        "Dashboard" 
+    ]
+)
+
 st.title("🏗 BIM Metadata Dashboard")
+# ----------------------------
+# FILE UPLOAD PAGE
+# ----------------------------
+
+if page == "Upload BIM Files":
+
+    st.header("Upload BIM Files")
+
+    discipline = st.selectbox(
+        "Select Discipline",
+        [
+            "architecture",
+            "structure",
+            "mep",
+            "electrical",
+            "civil"
+        ]
+    )
+
+    uploaded_files = st.file_uploader(
+        "Choose BIM files",
+        type=["rvt", "ifc", "pdf", "dwg"],
+        accept_multiple_files=True
+    )
+
+    if st.button("Upload Files"):
+
+        if uploaded_files:
+
+            blob_service_client = BlobServiceClient.from_connection_string(CONNECTION_STRING)
+
+            for uploaded_file in uploaded_files:
+
+                blob_client = blob_service_client.get_blob_client(
+                    container=discipline,
+                    blob=uploaded_file.name
+                )
+
+                blob_client.upload_blob(
+                    uploaded_file.getvalue(),
+                    overwrite=True
+                )
+
+            st.success(
+                f"{len(uploaded_files)} file(s) uploaded successfully."
+            )
+
+    st.stop()
 
 st.metric("Total Files", len(df))
 
