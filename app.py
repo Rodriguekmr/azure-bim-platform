@@ -6,12 +6,11 @@ from azure.storage.blob import BlobServiceClient
 # ----------------------------
 # CONFIG
 # ----------------------------
-from dotenv import load_dotenv
-import os
+import streamlit as st
 
-load_dotenv()  # must be before os.environ.get()
-
-CONNECTION_STRING = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
+CONNECTION_STRING = st.secrets[
+    "AZURE_STORAGE_CONNECTION_STRING"
+]
 
 # Add this to confirm it loaded
 if not CONNECTION_STRING:

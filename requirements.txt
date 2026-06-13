@@ -2,3 +2,4 @@ streamlit
 pandas
 azure-data-tables
 python-dotenv
+azure-storage-blob
