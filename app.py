@@ -121,6 +121,8 @@ st.dataframe(df[[
     "filetype",
     "category",
     "discipline",
+    "uploaded_by",
+    "user_id",
     "upload_date"
 ]])
 
@@ -136,7 +138,12 @@ st.bar_chart(df["filetype"].value_counts())
 st.subheader("Uploads Over Time")
 time_df = df.groupby(df["upload_date"].dt.date).size()
 st.line_chart(time_df)
-
+st.subheader("Top Contributors")
+st.bar_chart(
+    df["uploaded_by"].value_counts()
+)
+user_email = "test.user@company.com"
+user_id = "001"
 # ----------------------------
 # RAW DATA EXPANDER
 # ----------------------------

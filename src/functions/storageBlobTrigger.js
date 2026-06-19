@@ -76,6 +76,8 @@ app.storageBlob("storageBlobTrigger", {
       filetype: extension,
       category: category,
       discipline: discipline,
+      uploaded_by: userEmail,
+      user_id: userId,
       upload_date: new Date().toISOString(),
     };
     context.log("START TABLE WRITE");
@@ -96,6 +98,8 @@ app.storageBlob("storageBlobTrigger", {
         filename: metadata.filename,
         filetype: metadata.filetype,
         category: metadata.category,
+        uploaded_by: metadata.uploaded_by,
+        user_id: metadata.user_id,
         upload_date: metadata.upload_date,
       };
 
