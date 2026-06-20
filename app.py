@@ -116,16 +116,21 @@ st.divider()
 # TABLE VIEW
 # ----------------------------
 st.subheader("Uploaded Files")
-st.dataframe(df[[
+display_columns = [
     "filename",
     "filetype",
     "category",
     "discipline",
     "uploaded_by",
-    "user_id",
     "upload_date"
-]])
+]
 
+existing_columns = [
+    col for col in display_columns
+    if col in df.columns
+]
+
+st.dataframe(df[existing_columns])
 # ----------------------------
 # ANALYTICS
 # ----------------------------
