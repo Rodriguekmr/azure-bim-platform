@@ -3,3 +3,7 @@ pandas
 azure-data-tables
 python-dotenv
 azure-storage-blob
+msal
+streamlit-oauth
+requests
+streamlit-aggrid

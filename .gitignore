@@ -58,3 +58,4 @@ local.settings.json
 .env
 .tfstate.*
 .terraform.lock.hcl
+.streamlit/secrets.toml
