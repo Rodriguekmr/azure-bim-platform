@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 from azure.data.tables import TableServiceClient
 from azure.storage.blob import BlobServiceClient
 from st_aggrid import AgGrid, GridOptionsBuilder
+#-------for authentication in streamlit cloud-------
+from auth import get_auth_url, process_login
 
 # ==================================================
 # PAGE CONFIG
@@ -26,24 +28,56 @@ st.set_page_config(
 # ==================================================
 
 #-------------------------------------------------------------
+# load_dotenv()
+
+# if "authenticated" not in st.session_state:
+#     st.session_state.authenticated = False
+
+# if "user_email" not in st.session_state:
+    
+#     user_email = ""
+
+# if "user_id" not in st.session_state:
+    
+#     user_id = ""
+
+# CONNECTION_STRING = os.getenv(
+#     "AZURE_STORAGE_CONNECTION_STRING"
+# )
+
 load_dotenv()
+
+#-----------------------------------------------------------
+# ==================================================
+# SESSION STATE INITIALIZATION
+# ==================================================
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
 if "user_email" not in st.session_state:
-    
-    user_email = ""
+    st.session_state.user_email = ""
 
 if "user_id" not in st.session_state:
-    
-    user_id = ""
+    st.session_state.user_id = ""
 
-#-------------------------------------------------------------
+if "groups" not in st.session_state:
+    st.session_state.groups = []
+#-----------------------------------------------------------
+def get_setting(name):
 
-CONNECTION_STRING = os.getenv(
+
+    if name in st.secrets:
+
+        return st.secrets[name]
+
+    return os.getenv(name)
+
+
+CONNECTION_STRING = get_setting(
     "AZURE_STORAGE_CONNECTION_STRING"
 )
+
 blob_service_client = BlobServiceClient.from_connection_string(
     CONNECTION_STRING
 )
@@ -62,39 +96,106 @@ if not CONNECTION_STRING:
 # # Login screen
 # # --------------------------------------------
 
-import streamlit as st
-if not st.user.is_logged_in:
+# import streamlit as st
+# if not st.user.is_logged_in:
+
+#     st.title("🏗️ Azure BIM Platform")
+
+#     st.markdown(
+#         """
+#         Welcome to the BIM Workflow Automation Platform.
+
+#         Please sign in to continue.
+#         """
+#     )
+
+#     if st.button("Sign in with Microsoft"):
+#         st.login("microsoft")
+
+#     st.stop()
+
+
+# user_email = st.user["preferred_username"]
+# user_id = st.user["oid"]
+
+# groups = st.user["groups"]
+
+# BIMCOORDINATOR_GROUP = "fc939939-19bf-4fe0-aeac-158fb4390448"
+# VIEWER_GROUP = "8bf75d23-5b5f-4c55-9530-e00091a53108"
+# ARCHITECT_GROUP = "602dcf78-16ef-4172-8e86-7ef4bc832ac9"
+
+# is_admin = BIMCOORDINATOR_GROUP in groups
+
+# is_architect = ARCHITECT_GROUP in groups
+
+# is_viewer = VIEWER_GROUP in groups
+
+# can_upload = is_admin or is_architect
+
+# can_download = is_admin or is_architect
+
+# can_delete = is_admin
+# ==================================================
+# MICROSOFT ENTRA AUTHENTICATION
+# ==================================================
+
+process_login()
+
+if not st.session_state.get("authenticated", False):
 
     st.title("🏗️ Azure BIM Platform")
 
+    st.markdown("""
+    Welcome to the BIM Workflow Automation Platform.
+
+    Please sign in to continue.
+    """)
+
+    # CREATE login_url FIRST
+    login_url = get_auth_url()
+
+    # THEN USE IT
     st.markdown(
-        """
-        Welcome to the BIM Workflow Automation Platform.
-
-        Please sign in to continue.
-        """
+        f"""
+        <a href="{login_url}" target="_self">
+            <button style="
+                background:#F63366;
+                color:white;
+                border:none;
+                padding:0.6em 1.2em;
+                border-radius:0.5em;
+                cursor:pointer;
+                font-size:16px;">
+                Sign in with Microsoft
+            </button>
+        </a>
+        """,
+        unsafe_allow_html=True,
     )
-
-    if st.button("Sign in with Microsoft"):
-        st.login("microsoft")
 
     st.stop()
 
 
-user_email = st.user["preferred_username"]
-user_id = st.user["oid"]
+user_email = st.session_state.user_email
 
-groups = st.user["groups"]
+user_id = st.session_state.user_id
+
+groups = st.session_state.groups
+
 
 BIMCOORDINATOR_GROUP = "fc939939-19bf-4fe0-aeac-158fb4390448"
+
 VIEWER_GROUP = "8bf75d23-5b5f-4c55-9530-e00091a53108"
+
 ARCHITECT_GROUP = "602dcf78-16ef-4172-8e86-7ef4bc832ac9"
+
 
 is_admin = BIMCOORDINATOR_GROUP in groups
 
 is_architect = ARCHITECT_GROUP in groups
 
 is_viewer = VIEWER_GROUP in groups
+
 
 can_upload = is_admin or is_architect
 
@@ -121,8 +222,16 @@ with header_right:
     )
 
     
+    # if st.button("Logout"):
+    #     st.logout()
     if st.button("Logout"):
-        st.logout()
+
+        st.session_state.authenticated = False
+        st.session_state.user_email = ""
+        st.session_state.user_id = ""
+        st.session_state.groups = []
+
+        st.rerun()
 
 # ==================================================
 # NAVIGATION
