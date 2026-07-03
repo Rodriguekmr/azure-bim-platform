@@ -79,9 +79,6 @@ CONNECTION_STRING = get_setting(
     "AZURE_STORAGE_CONNECTION_STRING"
 )
 
-st.write(st.secrets)
-st.stop()
-
 blob_service_client = BlobServiceClient.from_connection_string(
     CONNECTION_STRING
 )
