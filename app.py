@@ -11,7 +11,7 @@ from azure.data.tables import TableServiceClient
 from azure.storage.blob import BlobServiceClient
 from st_aggrid import AgGrid, GridOptionsBuilder
 #-------for authentication in streamlit cloud-------
-from auth import get_auth_url, process_login
+# from auth import get_auth_url, process_login
 
 # ==================================================
 # PAGE CONFIG
