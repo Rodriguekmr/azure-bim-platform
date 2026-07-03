@@ -151,16 +151,13 @@ if not st.session_state.get("authenticated", False):
     Please sign in to continue.
     """)
 
-    # CREATE login_url FIRST
     login_url = get_auth_url()
 
-    if st.button("Sign in with Microsoft"):
-        st.markdown(
-            f"""
-            <meta http-equiv="refresh" content="0; url={login_url}">
-            """,
-            unsafe_allow_html=True,
-        )
+    st.link_button(
+        "Sign in with Microsoft",
+        login_url
+    )
+
     st.stop()
 
     # # THEN USE IT
