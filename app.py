@@ -53,17 +53,17 @@ load_dotenv()
 # SESSION STATE INITIALIZATION
 # ==================================================
 
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
+# if "authenticated" not in st.session_state:
+#     st.session_state.authenticated = False
 
-if "user_email" not in st.session_state:
-    st.session_state.user_email = ""
+# if "user_email" not in st.session_state:
+#     st.session_state.user_email = ""
 
-if "user_id" not in st.session_state:
-    st.session_state.user_id = ""
+# if "user_id" not in st.session_state:
+#     st.session_state.user_id = ""
 
-if "groups" not in st.session_state:
-    st.session_state.groups = []
+# if "groups" not in st.session_state:
+#     st.session_state.groups = []
 #-----------------------------------------------------------
 def get_setting(name):
 
@@ -98,7 +98,8 @@ if not CONNECTION_STRING:
 # # --------------------------------------------
 
 # import streamlit as st
-if not st.user.is_logged_in:
+# if not st.user.is_logged_in:
+if not st.user:
 
     st.title("🏗️ Azure BIM Platform")
 
@@ -111,7 +112,7 @@ if not st.user.is_logged_in:
     )
 
     if st.button("Sign in with Microsoft"):
-        st.login()
+        st.login("microsoft")
 
     st.stop()
 
