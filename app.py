@@ -3,6 +3,8 @@
 # # ----------------------------
 
 import streamlit as st
+st.write("Streamlit version:", st.__version__)
+st.stop()
 import pandas as pd
 import os
 
