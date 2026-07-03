@@ -161,7 +161,7 @@ if not st.session_state.get("authenticated", False):
             """,
             unsafe_allow_html=True,
         )
-        st.stop()
+    st.stop()
 
     # # THEN USE IT
     # st.markdown(
