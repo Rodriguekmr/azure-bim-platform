@@ -154,26 +154,35 @@ if not st.session_state.get("authenticated", False):
     # CREATE login_url FIRST
     login_url = get_auth_url()
 
-    # THEN USE IT
-    st.markdown(
-        f"""
-        <a href="{login_url}" target="_self">
-            <button style="
-                background:#F63366;
-                color:white;
-                border:none;
-                padding:0.6em 1.2em;
-                border-radius:0.5em;
-                cursor:pointer;
-                font-size:16px;">
-                Sign in with Microsoft
-            </button>
-        </a>
-        """,
-        unsafe_allow_html=True,
-    )
+    if st.button("Sign in with Microsoft"):
+        st.markdown(
+            f"""
+            <meta http-equiv="refresh" content="0; url={login_url}">
+            """,
+            unsafe_allow_html=True,
+        )
+        st.stop()
 
-    st.stop()
+    # # THEN USE IT
+    # st.markdown(
+    #     f"""
+    #     <a href="{login_url}" target="_self">
+    #         <button style="
+    #             background:#F63366;
+    #             color:white;
+    #             border:none;
+    #             padding:0.6em 1.2em;
+    #             border-radius:0.5em;
+    #             cursor:pointer;
+    #             font-size:16px;">
+    #             Sign in with Microsoft
+    #         </button>
+    #     </a>
+    #     """,
+    #     unsafe_allow_html=True,
+    # )
+
+    # st.stop()
 
 
 user_email = st.session_state.user_email
