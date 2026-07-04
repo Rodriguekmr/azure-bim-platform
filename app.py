@@ -98,17 +98,17 @@ if not CONNECTION_STRING:
 # # --------------------------------------------
 
 # import streamlit as st
-# if not st.user.is_logged_in:
-if st.user.is_logged_in:
+if not st.user.is_logged_in:
+# if not st.user:
 
     st.title("🏗️ Azure BIM Platform")
 
     st.markdown(
-        """
-        Welcome to the BIM Workflow Automation Platform.
+    """
+    Welcome to the BIM Workflow Automation Platform.
 
-        Please sign in to continue.
-        """
+    Please sign in to continue.
+    """
     )
 
     if st.button("Sign in with Microsoft"):
@@ -117,8 +117,10 @@ if st.user.is_logged_in:
     st.stop()
 
 
-st.write(st.user)
-st.stop()
+user_email = st.user["preferred_username"]
+user_id = st.user["oid"]
+
+groups = st.user["groups"]
 
 BIMCOORDINATOR_GROUP = "fc939939-19bf-4fe0-aeac-158fb4390448"
 VIEWER_GROUP = "8bf75d23-5b5f-4c55-9530-e00091a53108"
