@@ -99,7 +99,7 @@ if not CONNECTION_STRING:
 
 # import streamlit as st
 # if not st.user.is_logged_in:
-if not st.user:
+if st.user.is_logged_in:
 
     st.title("🏗️ Azure BIM Platform")
 
