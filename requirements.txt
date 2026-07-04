@@ -7,3 +7,4 @@ msal
 streamlit-oauth
 requests
 streamlit-aggrid
+authlib
