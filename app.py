@@ -479,20 +479,28 @@ if page == "Dashboard":
 
     if "upload_date" in df.columns:
 
-        df["upload_date"] = ( 
-            pd.to_datetime(
-                df["upload_date"],
-                utc=True,
-                errors="coerce"
-            )
-           .dt.tz_convert("Europe/Warsaw")
+        df["upload_date"] = pd.to_datetime(
+            df["upload_date"],
+            errors="coerce",
+            utc=True
         )
+
+        df["upload_date"] = df["upload_date"].dt.tz_convert("Europe/Warsaw")
+    else:
+        df["upload_date"] = pd.NaT
+
+   
 
     if "file_size" in df.columns:
 
         def human_size(size):
+            if pd.isna(size):
+                return ""
 
-            size = float(size)
+            try:
+                size = float(size)
+            except Exception:
+                return ""
 
             for unit in ["B", "KB", "MB", "GB"]:
 
@@ -504,6 +512,11 @@ if page == "Dashboard":
             return f"{size:.1f} TB"
 
         df["file_size"] = df["file_size"].apply(human_size)
+    else:
+        df["file_size"] = ""
+
+
+        df["file_size"] = df["file_size"].apply(human_size)
 
     display_df = df.copy()
 
@@ -512,6 +525,7 @@ if page == "Dashboard":
         display_df["upload_date"] = (
             display_df["upload_date"]
             .dt.strftime("%d/%m/%Y %H:%M:%S")
+            .fillna("")
         )
 
     # ----------------------------------------------
