@@ -749,11 +749,11 @@ if page == "Dashboard":
             st.subheader("Uploads by Discipline")
 
             disciplines = [
-                "Architecture",
-                "Structure",
-                "MEP",
-                "Electrical",
-                "Civil"
+                "architecture",
+                "structure",
+                "mep",
+                "electrical",
+                "civil"
             ]
 
             counts = (
