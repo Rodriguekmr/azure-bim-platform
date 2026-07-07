@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from azure.data.tables import TableServiceClient
 from azure.storage.blob import BlobServiceClient
 from st_aggrid import AgGrid, GridOptionsBuilder
+from azure.data.tables import UpdateMode
 #-------for authentication in streamlit cloud-------
 # from auth import get_auth_url, process_login
 
