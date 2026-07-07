@@ -516,7 +516,7 @@ if page == "Dashboard":
         df["file_size"] = ""
 
 
-        df["file_size"] = df["file_size"].apply(human_size)
+    df["file_size"] = df["file_size"].apply(human_size)
 
     display_df = df.copy()
 
