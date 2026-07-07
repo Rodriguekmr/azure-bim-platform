@@ -7,13 +7,10 @@ import streamlit as st
 import pandas as pd
 import os
 
-import uuid
-
 from dotenv import load_dotenv
 from azure.data.tables import TableServiceClient
 from azure.storage.blob import BlobServiceClient
 from st_aggrid import AgGrid, GridOptionsBuilder
-from azure.data.tables import UpdateMode
 #-------for authentication in streamlit cloud-------
 # from auth import get_auth_url, process_login
 
@@ -340,71 +337,8 @@ if page == "Upload BIM Files":
                         metadata={
                             "uploaded_by": user_email,
                             "user_id": user_id,
-                            "file_size": str(uploaded_file.size)
                         }
                     )
-
-                    # -------------------------------------------------
-                    # Save metadata to Azure Table
-                    # -------------------------------------------------
-
-                    entity = {
-
-                        "PartitionKey": discipline,
-
-                        "RowKey": str(uuid.uuid4()),
-
-                        "filename": filename,
-
-                        "blob_name": blob_name,
-
-                        "container": discipline,
-
-                        "filetype": ext.replace(".", "").upper(),
-
-                        "discipline": discipline,
-
-                        "category": "",
-
-                        "upload_date": datetime.utcnow().isoformat(),
-
-                        "uploaded_by": user_email,
-
-                        "user_id": user_id,
-
-                        "version": version,
-
-                        "is_latest": True,
-
-                        "file_size": uploaded_file.size
-
-                    }
-
-                    table_client.create_entity(entity)
-
-                    # -------------------------------------------------
-                    # Older versions are no longer latest
-                    # -------------------------------------------------
-
-                    for e in table_client.list_entities():
-
-                        if (
-
-                            e["filename"] == filename
-
-                            and e["RowKey"] != entity["RowKey"]
-
-                        ):
-
-                            e["is_latest"] = False
-
-                            table_client.update_entity(
-
-                                entity=e,
-                                mode=UpdateMode.MERGE
-
-                            )
-
 
                     st.write(f"✅ Uploaded: {blob_name}")
 
@@ -471,7 +405,6 @@ if page == "Dashboard":
             },
             inplace=True
         )
-        df["id"] = df["id"].astype(str)
 
     # ----------------------------------------------
     # CLEAN DATA
@@ -479,64 +412,22 @@ if page == "Dashboard":
 
     if "upload_date" in df.columns:
 
-        df["upload_date"] = pd.to_datetime(
-            df["upload_date"],
-            errors="coerce",
-            utc=True
+        df["upload_date"] = ( 
+            pd.to_datetime(
+                df["upload_date"],
+                utc=True,
+                errors="coerce"
+            )
+           .dt.tz_convert("Europe/Warsaw")
         )
-
-        df["upload_date"] = (
-            df["upload_date"]
-            .dt.tz_convert("Europe/Warsaw")
-        )
-
-    else:
-
-        df["upload_date"] = pd.NaT
-
-
-    # ----------------------------------------------
-    # FILE SIZE
-    # ----------------------------------------------
-
-    def human_size(size):
-
-        if pd.isna(size):
-            return ""
-
-        try:
-            size = float(size)
-        except Exception:
-            return ""
-
-        for unit in ["B", "KB", "MB", "GB"]:
-
-            if size < 1024:
-                return f"{size:.1f} {unit}"
-
-            size /= 1024
-
-        return f"{size:.1f} TB"
-
-
-    if "file_size" not in df.columns:
-
-        df["file_size"] = ""
-
-    df["file_size"] = df["file_size"].apply(human_size)
-
-
-    # ----------------------------------------------
-    # DISPLAY DATA
-    # ----------------------------------------------
-
     display_df = df.copy()
 
-    display_df["upload_date"] = (
-        display_df["upload_date"]
-        .dt.strftime("%d/%m/%Y %H:%M:%S")
-        .fillna("")
-    )
+    if "upload_date" in display_df.columns:
+
+        display_df["upload_date"] = (
+            display_df["upload_date"]
+            .dt.strftime("%d/%m/%Y %H:%M:%S")
+        )
 
     # ----------------------------------------------
     # DASHBOARD HEADER
@@ -566,12 +457,6 @@ if page == "Dashboard":
         False: ""
     })
 
-
-    if "file_size" not in display_df.columns:
-        display_df["file_size"] = ""
-
-    
-
     table_df = display_df[
         [
             "nr",
@@ -586,8 +471,7 @@ if page == "Dashboard":
             "user_id",
             "id",
             "blob_name",
-            "container",
-            "file_size"
+            "container"
         ]
     ].copy()
 
@@ -612,7 +496,7 @@ if page == "Dashboard":
 
         gb.configure_selection(
             selection_mode="single",
-            use_checkbox=False
+            use_checkbox=True
         )
    
     gb.configure_column("nr", width=100)
