@@ -275,11 +275,11 @@ if page == "Upload BIM Files":
         discipline = st.selectbox(
             "Discipline",
             [
-                "Architecture",
-                "Structure",
-                "MEP",
-                "Electrical",
-                "Civil"
+                "architecture",
+                "structure",
+                "mep",
+                "electrical",
+                "civil"
             ]
         )
 
@@ -364,7 +364,7 @@ if page == "Upload BIM Files":
 
                         "discipline": discipline,
 
-                        "category": category,
+                        "category": "",
 
                         "upload_date": datetime.utcnow().isoformat(),
 
@@ -520,15 +520,11 @@ if page == "Dashboard":
 
     display_df = df.copy()
 
-    display_df["file_size"] = display_df["file_size"].fillna("")
-    display_df["upload_date"] = display_df["upload_date"].fillna(pd.NaT)
-
     if "upload_date" in display_df.columns:
 
         display_df["upload_date"] = (
             display_df["upload_date"]
             .dt.strftime("%d/%m/%Y %H:%M:%S")
-            .fillna("")
         )
 
     # ----------------------------------------------
@@ -749,11 +745,11 @@ if page == "Dashboard":
             st.subheader("Uploads by Discipline")
 
             disciplines = [
-                "architecture",
-                "structure",
-                "mep",
-                "electrical",
-                "civil"
+                "Architecture",
+                "Structure",
+                "MEP",
+                "Electrical",
+                "Civil"
             ]
 
             counts = (
@@ -786,18 +782,6 @@ if page == "Dashboard":
 
             st.bar_chart(filetype_counts)
 
-    col1, col2 = st.columns([2, 3])
-
-    with col1:
-
-        category = st.selectbox(
-            "Category",
-            [
-                "Revit Model",
-                "Open BIM",
-                "Document"
-            ]
-        )
     # ----------------------------------------------
     # UPLOAD TREND
     # ----------------------------------------------
