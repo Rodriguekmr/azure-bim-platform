@@ -7,6 +7,8 @@ import streamlit as st
 import pandas as pd
 import os
 
+import uuid
+
 from dotenv import load_dotenv
 from azure.data.tables import TableServiceClient
 from azure.storage.blob import BlobServiceClient
@@ -337,8 +339,72 @@ if page == "Upload BIM Files":
                         metadata={
                             "uploaded_by": user_email,
                             "user_id": user_id,
+                            "file_size": str(uploaded_file.size)
                         }
                     )
+
+                    # -------------------------------------------------
+                    # Save metadata to Azure Table
+                    # -------------------------------------------------
+
+                    entity = {
+
+                        "PartitionKey": discipline,
+
+                        "RowKey": str(uuid.uuid4()),
+
+                        "filename": filename,
+
+                        "blob_name": blob_name,
+
+                        "container": discipline,
+
+                        "filetype": ext.replace(".", "").upper(),
+
+                        "discipline": discipline,
+
+                        "category": "",
+
+                        "upload_date": datetime.utcnow().isoformat(),
+
+                        "uploaded_by": user_email,
+
+                        "user_id": user_id,
+
+                        "version": version,
+
+                        "is_latest": True,
+
+                        "file_size": uploaded_file.size
+
+                    }
+
+                    table_client.create_entity(entity)
+
+                    # -------------------------------------------------
+                    # Older versions are no longer latest
+                    # -------------------------------------------------
+
+                    for e in table_client.list_entities():
+
+                        if (
+
+                            e["filename"] == filename
+
+                            and e["RowKey"] != entity["RowKey"]
+
+                        ):
+
+                            e["is_latest"] = False
+
+                            table_client.update_entity(
+
+                                mode="Merge",
+
+                                entity=e
+
+                            )
+
 
                     st.write(f"✅ Uploaded: {blob_name}")
 
@@ -405,6 +471,7 @@ if page == "Dashboard":
             },
             inplace=True
         )
+        df["id"] = df["id"].astype(str)
 
     # ----------------------------------------------
     # CLEAN DATA
@@ -420,6 +487,24 @@ if page == "Dashboard":
             )
            .dt.tz_convert("Europe/Warsaw")
         )
+
+    if "file_size" in df.columns:
+
+        def human_size(size):
+
+            size = float(size)
+
+            for unit in ["B", "KB", "MB", "GB"]:
+
+                if size < 1024:
+                    return f"{size:.1f} {unit}"
+
+                size /= 1024
+
+            return f"{size:.1f} TB"
+
+        df["file_size"] = df["file_size"].apply(human_size)
+
     display_df = df.copy()
 
     if "upload_date" in display_df.columns:
@@ -462,16 +547,17 @@ if page == "Dashboard":
             "nr",
             "filename",
             "filetype",
+            "version",
+            "is_latest",
             "discipline",
             "category",
             "upload_date",
             "uploaded_by",
             "user_id",
-            "version",
-            "is_latest",
             "id",
             "blob_name",
-            "container"
+            "container",
+            "file_size"
         ]
     ].copy()
 
@@ -496,7 +582,7 @@ if page == "Dashboard":
 
         gb.configure_selection(
             selection_mode="single",
-            use_checkbox=True
+            use_checkbox=False
         )
    
     gb.configure_column("nr", width=100)
