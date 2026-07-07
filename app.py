@@ -485,46 +485,58 @@ if page == "Dashboard":
             utc=True
         )
 
-        df["upload_date"] = df["upload_date"].dt.tz_convert("Europe/Warsaw")
+        df["upload_date"] = (
+            df["upload_date"]
+            .dt.tz_convert("Europe/Warsaw")
+        )
+
     else:
+
         df["upload_date"] = pd.NaT
 
-   
 
-    if "file_size" in df.columns:
+    # ----------------------------------------------
+    # FILE SIZE
+    # ----------------------------------------------
 
-        def human_size(size):
-            if pd.isna(size):
-                return ""
+    def human_size(size):
 
-            try:
-                size = float(size)
-            except Exception:
-                return ""
+        if pd.isna(size):
+            return ""
 
-            for unit in ["B", "KB", "MB", "GB"]:
+        try:
+            size = float(size)
+        except Exception:
+            return ""
 
-                if size < 1024:
-                    return f"{size:.1f} {unit}"
+        for unit in ["B", "KB", "MB", "GB"]:
 
-                size /= 1024
+            if size < 1024:
+                return f"{size:.1f} {unit}"
 
-            return f"{size:.1f} TB"
+            size /= 1024
 
-    else:
+        return f"{size:.1f} TB"
+
+
+    if "file_size" not in df.columns:
+
         df["file_size"] = ""
-
 
     df["file_size"] = df["file_size"].apply(human_size)
 
+
+    # ----------------------------------------------
+    # DISPLAY DATA
+    # ----------------------------------------------
+
     display_df = df.copy()
 
-    if "upload_date" in display_df.columns:
-
-        display_df["upload_date"] = (
-            display_df["upload_date"]
-            .dt.strftime("%d/%m/%Y %H:%M:%S")
-        )
+    display_df["upload_date"] = (
+        display_df["upload_date"]
+        .dt.strftime("%d/%m/%Y %H:%M:%S")
+        .fillna("")
+    )
 
     # ----------------------------------------------
     # DASHBOARD HEADER
