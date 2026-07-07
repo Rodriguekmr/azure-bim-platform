@@ -399,9 +399,8 @@ if page == "Upload BIM Files":
 
                             table_client.update_entity(
 
-                                mode="Merge",
-
-                                entity=e
+                                entity=e,
+                                mode=UpdateMode.MERGE
 
                             )
 
