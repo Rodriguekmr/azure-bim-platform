@@ -542,6 +542,13 @@ if page == "Dashboard":
         False: ""
     })
 
+
+    if "file_size" not in display_df.columns:
+        display_df["file_size"] = ""
+
+    st.write(display_df.columns.tolist())
+    st.stop()
+
     table_df = display_df[
         [
             "nr",
