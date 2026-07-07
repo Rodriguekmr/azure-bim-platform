@@ -275,11 +275,11 @@ if page == "Upload BIM Files":
         discipline = st.selectbox(
             "Discipline",
             [
-                "architecture",
-                "structure",
-                "mep",
-                "electrical",
-                "civil"
+                "Architecture",
+                "Structure",
+                "MEP",
+                "Electrical",
+                "Civil"
             ]
         )
 
@@ -364,7 +364,7 @@ if page == "Upload BIM Files":
 
                         "discipline": discipline,
 
-                        "category": "",
+                        "category": category,
 
                         "upload_date": datetime.utcnow().isoformat(),
 
@@ -519,6 +519,9 @@ if page == "Dashboard":
         df["file_size"] = df["file_size"].apply(human_size)
 
     display_df = df.copy()
+
+    display_df["file_size"] = display_df["file_size"].fillna("")
+    display_df["upload_date"] = display_df["upload_date"].fillna(pd.NaT)
 
     if "upload_date" in display_df.columns:
 
@@ -783,6 +786,18 @@ if page == "Dashboard":
 
             st.bar_chart(filetype_counts)
 
+    col1, col2 = st.columns([2, 3])
+
+    with col1:
+
+        category = st.selectbox(
+            "Category",
+            [
+                "Revit Model",
+                "Open BIM",
+                "Document"
+            ]
+        )
     # ----------------------------------------------
     # UPLOAD TREND
     # ----------------------------------------------
