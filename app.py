@@ -511,7 +511,6 @@ if page == "Dashboard":
 
             return f"{size:.1f} TB"
 
-        df["file_size"] = df["file_size"].apply(human_size)
     else:
         df["file_size"] = ""
 
