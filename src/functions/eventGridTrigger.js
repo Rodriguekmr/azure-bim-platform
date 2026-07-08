@@ -75,6 +75,9 @@ app.eventGrid("eventGridTrigger", {
       userEmail = properties.metadata.uploaded_by || "Unknown";
 
       userId = properties.metadata.user_id || "Unknown";
+      const fileSize = Number(
+        properties.metadata.file_size || properties.contentLength || 0,
+      );
     } catch (error) {
       context.log("Unable to read blob metadata.");
 
@@ -147,6 +150,8 @@ app.eventGrid("eventGridTrigger", {
         user_id: userId,
 
         upload_date: new Date().toISOString(),
+
+        file_size: fileSize,
       };
 
       await tableClient.createEntity(entity);
