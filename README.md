@@ -1,17 +1,19 @@
 # Azure BIM Workflow Automation Platform
 Live Demo
 
-Microsoft authentication required.
+NB: Microsoft authentication required.
 
 https://azure-bim-platform.streamlit.app
 
 ![Architecture](docs/Azure-Architecture.png)
 
-## Dashboard
+## Demo
 
-![Dashboard](docs/Azure-dashboard.png)
-![Dashboard](docs/Azure-dashboard1.png)
-![Dashboard](docs/Azure-dashboard2.png)
+<video width="1000" controls preload="metadata">
+  <source src="docs/Demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ## Overview
 
 The Azure BIM Workflow Automation Platform is a cloud-based solution designed to improve the management, tracking, and visibility of Building Information Modelling (BIM) files throughout a construction project lifecycle.
