@@ -7,7 +7,7 @@ https://azure-bim-platform.streamlit.app
 
 ![Architecture](docs/Azure-Architecture.png)
 
-[Demo Video](docs/Demo.mp4)
+[Demo Video](https://github.com/Rodriguekmr/azure-bim-platform/blob/main/docs/Demo.mp4)
 ## Dashboard
 
 ![Dashboard](docs/Azure-dashboard.png)
