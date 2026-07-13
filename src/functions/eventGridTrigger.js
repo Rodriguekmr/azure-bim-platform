@@ -60,6 +60,7 @@ app.eventGrid("eventGridTrigger", {
 
     let userEmail = "Unknown";
     let userId = "Unknown";
+    let fileSize = 0;
 
     try {
       const blobServiceClient = BlobServiceClient.fromConnectionString(
@@ -75,8 +76,8 @@ app.eventGrid("eventGridTrigger", {
       userEmail = properties.metadata.uploaded_by || "Unknown";
 
       userId = properties.metadata.user_id || "Unknown";
-      const fileSize = Number(
-        properties.metadata.file_size || properties.contentLength || 0,
+      fileSize = Number(
+        properties.metadata.file_size ?? properties.contentLength ?? 0,
       );
     } catch (error) {
       context.log("Unable to read blob metadata.");
