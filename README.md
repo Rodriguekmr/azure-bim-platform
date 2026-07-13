@@ -1,4 +1,10 @@
 # Azure BIM Workflow Automation Platform
+Live Demo
+
+Microsoft authentication required.
+
+https://azure-bim-platform.streamlit.app
+
 ![Architecture](docs/Azure-Architecture.png)
 
 ## Dashboard
@@ -85,6 +91,7 @@ Streamlit Analytics Dashboard
 Users can upload BIM-related files including:
 
 * Revit (.rvt)
+* PLN (.pln)
 * IFC (.ifc)
 * PDF (.pdf)
 * DWG (.dwg)
@@ -95,9 +102,12 @@ The platform automatically identifies:
 
 * File name
 * File type
+* Versioning
 * Category
 * Discipline
 * Upload date
+* Upload_by
+* File size
 
 ### Centralized Metadata Repository
 
@@ -160,9 +170,6 @@ This solution demonstrates how cloud technologies can modernize BIM workflows by
 
 Planned enhancements include:
 
-* User authentication
-* Multi-project management
-* File version control
 * Advanced BIM analytics
 * Power BI integration
 * Automated project reporting
